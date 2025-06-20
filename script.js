@@ -1,9 +1,19 @@
+let quotes = [];
+
 async function getQuote() {
   try {
-    const res = await fetch("https://api.quotable.io/random");
-    const data = await res.json();
-    document.getElementById("quote-box").innerText = `"${data.content}"`;
-    document.getElementById("author").innerText = `— ${data.author}`;
+    if (quotes.length === 0) {
+      const res = await fetch("https://type.fit/api/quotes");
+      quotes = await res.json();
+    }
+
+    const random = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[random];
+
+    document.getElementById("quote-box").innerText = `"${quote.text}"`;
+    document.getElementById("author").innerText = `— ${
+      quote.author || "Unknown"
+    }`;
   } catch (error) {
     document.getElementById("quote-box").innerText = "Failed to load quote.";
     document.getElementById("author").innerText = "";
